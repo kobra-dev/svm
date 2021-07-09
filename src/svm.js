@@ -26,7 +26,7 @@ var defaultOptions = {
  * @param {function} [options.random=Math.random] - custom random number generator
  * @constructor
  */
-function SVM(options) {
+export default function SVM(options) {
     this.options = Object.assign({}, defaultOptions, options);
 
     this.kernel = new Kernel(this.options.kernel, this.options.kernelOptions);
@@ -358,5 +358,3 @@ SVM.prototype._applyWhitening = function (features) {
     }
     return whitened;
 };
-
-module.exports = SVM;
