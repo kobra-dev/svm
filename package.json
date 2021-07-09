@@ -1,6 +1,6 @@
 {
   "name": "@kobra-dev/ml-svm",
-  "version": "2.1.2",
+  "version": "2.1.4",
   "description": "Support Vector Machine in Javascript",
   "main": "src/svm.js",
   "directories": {
@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.14.5",
+    "@babel/plugin-transform-typescript": "^7.14.6",
     "ml-kernel": "^2.2.0",
     "ml-stat": "^1.2.0"
   }
