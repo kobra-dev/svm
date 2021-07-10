@@ -1,79 +1,103 @@
-# ml-svm
+# TSDX User Guide
 
-  [![NPM version][npm-image]][npm-url]
-  [![build status][travis-image]][travis-url]
-  [![David deps][david-image]][david-url]
-  [![npm download][download-image]][download-url]
-  
-Support Vector Machines in Javascript
+Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
 
-## :warning: :warning: This is a simplified implementation of SVM, primarily meant for students to understand the algorithm. For real world applications, please check out [libsvm-js](https://github.com/mljs/libsvm) :warning: :warning:
+> This TSDX setup is meant for developing libraries (not apps!) that can be published to NPM. If you’re looking to build a Node app, you could use `ts-node-dev`, plain `ts-node`, or simple `tsc`.
 
-Implementation of [this simplified Sequential Minimization Optimization algorithm](http://cs229.stanford.edu/materials/smo.pdf)
+> If you’re new to TypeScript, checkout [this handy cheatsheet](https://devhints.io/typescript)
 
-## Installation
+## Commands
 
-`npm install ml-svm`
+TSDX scaffolds your new library inside `/src`.
 
-## API
-[API documentation](https://mljs.github.io/svm)
+To run TSDX, use:
 
-## Example
-
-```js
-// Instantiate the svm classifier
-var SVM = require('ml-svm');
-
-var options = {
-  C: 0.01,
-  tol: 10e-4,
-  maxPasses: 10,
-  maxIterations: 10000,
-  kernel: 'rbf',
-  kernelOptions: {
-    sigma: 0.5
-  }
-};
-
-var svm = new SVM(options);
-
-// Train the classifier - we give him an xor
-var features = [[0,0],[0,1],[1,1],[1,0]];
-var labels = [1, -1, 1, -1];
-svm.train(features, labels);
-
-// Let's see how narrow the margin is
-var margins = svm.margin(features);
-
-// Let's see if it is separable by testing on the training data
-svm.predict(features); // [1, -1, 1, -1]
-
-// I want to see what my support vectors are
-var supportVectors = svm.supportVectors();
- 
-// Now we want to save the model for later use
-var model = svm.toJSON();
-
-/// ... later, you can make predictions without retraining the model
-var importedSvm = SVM.load(model);
-importedSvm.predict(features); // [1, -1, 1, -1] 
+```bash
+npm start # or yarn start
 ```
 
+This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
 
-## Authors
+To do a one-off build, use `npm run build` or `yarn build`.
 
-  - [Miguel Asencio](https://github.com/maasencioh)
-  - [Daniel Kostro](https://github.com/stropitek)
+To run tests, use `npm test` or `yarn test`.
 
-## License
+## Configuration
 
-  [MIT](./LICENSE)
+Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
 
-[npm-image]: https://img.shields.io/npm/v/ml-svm.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/ml-svm
-[travis-image]: https://img.shields.io/travis/mljs/svm/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/mljs/svm
-[david-image]: https://img.shields.io/david/mljs/svm.svg?style=flat-square
-[david-url]: https://david-dm.org/mljs/svm
-[download-image]: https://img.shields.io/npm/dm/ml-svm.svg?style=flat-square
-[download-url]: https://npmjs.org/package/ml-svm
+### Jest
+
+Jest tests are set up to run with `npm test` or `yarn test`.
+
+### Bundle Analysis
+
+[`size-limit`](https://github.com/ai/size-limit) is set up to calculate the real cost of your library with `npm run size` and visualize the bundle with `npm run analyze`.
+
+#### Setup Files
+
+This is the folder structure we set up for you:
+
+```txt
+/src
+  index.tsx       # EDIT THIS
+/test
+  blah.test.tsx   # EDIT THIS
+.gitignore
+package.json
+README.md         # EDIT THIS
+tsconfig.json
+```
+
+### Rollup
+
+TSDX uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
+
+### TypeScript
+
+`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
+
+## Continuous Integration
+
+### GitHub Actions
+
+Two actions are added by default:
+
+- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
+- `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
+
+## Optimizations
+
+Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
+
+```js
+// ./types/index.d.ts
+declare var __DEV__: boolean;
+
+// inside your code...
+if (__DEV__) {
+  console.log('foo');
+}
+```
+
+You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+
+## Module Formats
+
+CJS, ESModules, and UMD module formats are supported.
+
+The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
+
+## Named Exports
+
+Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+
+## Including Styles
+
+There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
+
+For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
+
+## Publishing to NPM
+
+We recommend using [np](https://github.com/sindresorhus/np).
